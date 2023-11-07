@@ -1,31 +1,29 @@
 ---- Installation ----
 
-be sure to have docker installed in your work machine
-If you are not working with Linux, you may also install Make 
+Clone this repository (https://github.com/VictoriaLabs/bot-twitch.git)  
+Install Docker (https://docs.docker.com/get-docker/)  
+Install Docker-compose (if you don't already get it) (https://docs.docker.com/compose/install/)  
+Install Make (https://tilburgsciencehub.com/building-blocks/configure-your-computer/automation-and-workflows/make/)  
+Enjoy (optional)  
 
-then run :
-```
-make install
-```
+---- Get started ----
 
----- Commands ----
-
-Run the app on the container :
+To start the Container :
 ```
-make build run
+make run
 ```
 
-Stop the app on the container :
+To stop the container : 
 ```
 make stop
 ```
 
-Run the appoutside of the container (only use for debug) :
-```
-make quickStart
-```
+---- Important Information ----
 
-Restart the app on the container :
-```
-make build restart
-```
+Add/modify the files inside the /src folder automatically add/modify the  same files in the container
+
+The Node server restart at any modification
+
+To add a new package, execute "npm install [new package]" inside the /src folder
+
+The server runs at http://localhost:8000

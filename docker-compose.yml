@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - '8000:8000'
+    environment:
+      - PORT=8000
+    volumes:
+      - ./src:/usr/src/app
+    command: bash -c "npm i && npx ts-node-dev --clear --poll app.ts" #remplacer par "npm i && npx ts-node app.ts" en prod (node-dev utilise du CPU)
