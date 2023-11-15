@@ -3,7 +3,6 @@ require('dotenv').config();
 const tmi = require('tmi.js');
 const socket = require('./socket.js');
 
-
 // Expression régulière utilisée pour analyser les commandes de chat.
 const regexpCommand = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?/);
 
