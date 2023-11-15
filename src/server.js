@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 const tmi = require('tmi.js');
-const twitchAPI = require('./twitchAPI.js');
 const socket = require('./socket.js');
 
 
