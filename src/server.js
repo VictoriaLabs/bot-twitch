@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const tmi = require('tmi.js');
 const twitchAPI = require('./twitchAPI.js');
+const socket = require('./socket.js');
 
 const regexpCommand = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?/);
 
@@ -17,11 +18,13 @@ const client = new tmi.Client({
 		username: process.env.TWITCH_BOT_USERNAME,
 		password: process.env.TWITCH_OAUTH_TOKEN
 	},
-    // TODO: Récupérer les channels depuis le core
+    
 	channels: [ 'victorialabs' ]
 });
 
-client.connect();
+client.connect().catch((err) => {
+    console.error('Failed to connect :', err);
+});
 
 client.on('message', (channel, tags, message, self) => {
     const isNotBot = tags.username.toLowerCase() !== process.env.TWITCH_BOT_USERNAME;
@@ -42,7 +45,10 @@ client.on('message', (channel, tags, message, self) => {
             client.say(channel, response);
         }
     } else {
-        // TODO: Envoyer les messages au core
-        console.log(`Non-command message from ${tags['display-name']}: ${message}`);
+        try {
+            socket.emitEvent('message', { channel, tags, message });
+        } catch (error) {
+            console.log("Erreur lors de l'émission d'un message au WebSocket : ", error);
+        }
     }
 });
