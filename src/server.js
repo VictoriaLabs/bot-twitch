@@ -4,6 +4,8 @@ const tmi = require('tmi.js');
 const twitchAPI = require('./twitchAPI.js');
 const socket = require('./socket.js');
 
+
+// Expression régulière utilisée pour analyser les commandes de chat.
 const regexpCommand = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?/);
 
 const commands = {
@@ -45,8 +47,9 @@ client.on('message', (channel, tags, message, self) => {
             client.say(channel, response);
         }
     } else {
+        // Si le message n'est pas une commande, on l'envoie au WebSocket
         try {
-            socket.emitEvent('message', { channel, tags, message });
+            socket.emitEvent('twitch', { channel, tags, message });
         } catch (error) {
             console.log("Erreur lors de l'émission d'un message au WebSocket : ", error);
         }
