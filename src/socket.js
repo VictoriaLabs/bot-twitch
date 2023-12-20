@@ -1,4 +1,6 @@
-const socket = require('socket.io-client')('http://localhost:4000');
+require('dotenv').config();
+
+const socket = require('socket.io-client')(process.env.WEBSOCKET_URL);
 
 function emitEvent(eventName, data) {
     if (socket.connected)

@@ -8,6 +8,9 @@ Enjoy (optional)
 
 ---- Get started ----
 
+Rename the .env.example into .env and fill in the missing fields.
+
+
 To start the Container :
 ```
 make run
