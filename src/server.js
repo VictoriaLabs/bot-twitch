@@ -43,8 +43,6 @@ client.on('message', (channel, tags, message, self) => {
     if (commandMatch) {
         const [raw, command, argument] = commandMatch;
 
-
-
         const { response } = commands[command] || {};
 
         if (typeof response === 'function') {
