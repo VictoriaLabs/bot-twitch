@@ -4,6 +4,7 @@ const tmi = require('tmi.js');
 const socket = require('./socket.js');
 const fs = require('fs');
 const path = require('path');
+const { isNullOrUndefined } = require('util');
 const commands = {};
 
 // Expression régulière utilisée pour analyser les commandes de chat.
@@ -48,6 +49,7 @@ client.on('message', (channel, tags, message, self) => {
         if (typeof response === 'function') {
             response(client, tags.username, argument).then(result => {
                 if (typeof result === 'string') {
+                    console.log(result);
                     client.say(channel, result);
                 } else {
                     console.log('Erreur : la réponse de la fonction n\'est pas une chaîne.');
