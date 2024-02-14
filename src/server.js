@@ -1,11 +1,14 @@
 require('dotenv').config();
 
+const Sentry = require("@sentry/node");
 const tmi = require('tmi.js');
 const socket = require('./socket.js');
 const fs = require('fs');
 const path = require('path');
 const { isNullOrUndefined } = require('util');
 const commands = {};
+
+Sentry.init({ dsn: process.env.SENTRY_DSN });
 
 // Expression régulière utilisée pour analyser les commandes de chat.
 const regexpCommand = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?/);
