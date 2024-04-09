@@ -5,7 +5,6 @@ const tmi = require('tmi.js');
 const socket = require('./socket.js');
 const fs = require('fs');
 const path = require('path');
-const { isNullOrUndefined } = require('util');
 const commands = {};
 
 Sentry.init({ dsn: process.env.SENTRY_DSN });
@@ -19,7 +18,7 @@ const client = new tmi.Client({
         username: process.env.TWITCH_BOT_USERNAME,
         password: process.env.TWITCH_OAUTH_TOKEN
     },
-    channels: ['victorialabs']
+    channels: ['avamind']
 });
 
 client.connect().catch((err) => {
@@ -34,6 +33,11 @@ client.on('connected', () => {
         commands[command.name] = command;
         console.log(`Commande chargée : ${command.name}`)
     }
+
+    client.on('stream-up', (channel, tags) => {
+        console.log(`Stream by ${tags['display-name']} just went live!`);
+        socket.emitEvent('streamLive', channel);
+    });
 });
 
 client.on('message', (channel, tags, message, self) => {
@@ -64,9 +68,22 @@ client.on('message', (channel, tags, message, self) => {
     } else {
         // Si le message n'est pas une commande, on l'envoie au WebSocket
         try {
-            socket.emitEvent('twitch', { channel, tags, message });
+            const messageJSON = {
+                platform: 'twitch',
+                channelName: channel,
+                username: tags.username,
+                message,
+            };
+            socket.emitEvent('sendMessage', messageJSON);
         } catch (error) {
             console.log("Erreur lors de l'émission d'un message au WebSocket : ", error);
         }
     }
+});
+
+socket.onEvent('receiveMessage', (message) => {
+    // if (message.platform === 'twitch') {
+    //     client.say(message.channelName, message.message);
+    // }
+    console.log(message);
 });
