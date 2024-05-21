@@ -12,12 +12,6 @@ Sentry.init({ dsn: process.env.SENTRY_DSN });
 // Expression régulière utilisée pour analyser les commandes de chat.
 const regexpCommand = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?/);
 
-const commands = {
-    ping: {
-        response: 'Pong !'
-    }
-}
-
 let client;
 
 socket.onEvent('start', async (data) => {
@@ -96,4 +90,11 @@ socket.onEvent('stop', (data) => {
 
     client.disconnect();
     socket.offEvent('receiveMessage');
+});
+
+socket.onEvent('receiveMessage', (message) => {
+    // if (message.platform === 'twitch') {
+    //     client.say(message.channelName, message.message);
+    // }
+    console.log(message);
 });
