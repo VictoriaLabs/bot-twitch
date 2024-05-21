@@ -7,7 +7,7 @@ function emitEvent(eventName, data) {
   if (socket.connected)
     socket.emit(eventName, data);
   else
-  console.log('Le socket n\'est pas connecté.');
+    console.log('Le socket n\'est pas connecté.');
 };
 
 function onEvent(eventName, callback) {

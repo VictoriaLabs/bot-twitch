@@ -1,9 +1,15 @@
 require('dotenv').config();
 
+const Sentry = require("@sentry/node");
 const tmi = require('tmi.js');
-const twitchAPI = require('./twitchAPI.js');
 const socket = require('./socket.js');
+const fs = require('fs');
+const path = require('path');
+const twitchAPI = require('./twitchAPI.js');
 
+Sentry.init({ dsn: process.env.SENTRY_DSN });
+
+// Expression régulière utilisée pour analyser les commandes de chat.
 const regexpCommand = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?/);
 
 const commands = {
@@ -66,6 +72,22 @@ socket.onEvent('start', async (data) => {
     socket.onEvent('receiveMessage', (message) => {
         // client.say(message.channel, "["+message.username+"]" +message.message);
         client.say("victorialabs", "["+message.username+"] : " +message.message);
+    });
+
+    
+    client.on('connected', () => {
+        const commandFiles = fs.readdirSync(path.join(__dirname, '/commands')).filter(file => file.endsWith('.js'));
+
+        for (const file of commandFiles) {
+            const command = require(`./commands/${file}`);
+            commands[command.name] = command;
+            console.log(`Commande chargée : ${command.name}`)
+        }
+
+        client.on('stream-up', (channel, tags) => {
+            console.log(`Stream by ${tags['display-name']} just went live!`);
+            socket.emitEvent('streamLive', channel);
+        });
     });
 });
 
