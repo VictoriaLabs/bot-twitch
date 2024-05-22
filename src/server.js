@@ -6,6 +6,7 @@ const socket = require('./socket.js');
 const fs = require('fs');
 const path = require('path');
 const twitchAPI = require('./twitchAPI.js');
+const commands = {};
 
 Sentry.init({ dsn: process.env.SENTRY_DSN });
 
