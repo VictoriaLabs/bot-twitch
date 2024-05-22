@@ -65,7 +65,7 @@ socket.onEvent('start', async (data) => {
     
     socket.onEvent('receiveMessage', (message) => {
         // client.say(message.channel, "["+message.username+"]" +message.message);
-        client.say(process.env.TWITCH_BOT_USERNAME, "["+message.username+"] : " +message.message);
+        client.say(data.twitch, "["+message.username+"] : " +message.message);
     });
 
     
